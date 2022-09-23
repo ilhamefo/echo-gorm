@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - /pgvolumes:/var/lib/postgresql/data
+  web:
+    # container_name: gorm_echo
+    build: .
+    ports:
+      - 80:1323
+    volumes:
+      - /app
+    depends_on:
+      db:
+        condition: service_started
+    env_file:
+      - .env
+    links:
+      - db
+# volumes: /pgvolumes
